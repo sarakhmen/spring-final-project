@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -34,7 +33,7 @@ public class Product implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "creation_date")
-    private Date creationDate;
+    private Date creationDate = new Date();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private Set<Property> properties;
