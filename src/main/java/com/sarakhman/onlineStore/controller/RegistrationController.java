@@ -1,6 +1,7 @@
 package com.sarakhman.onlineStore.controller;
 
 import com.sarakhman.onlineStore.model.User;
+import com.sarakhman.onlineStore.service.OrderService;
 import com.sarakhman.onlineStore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -25,17 +27,20 @@ public class RegistrationController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    private OrderService orderService;
 
-    @GetMapping("signup")
+    @GetMapping("/signup")
     public String showSignUpPage(Model model) {
         User user = new User();
         model.addAttribute("user", user);
         return "signup";
     }
 
-    @PostMapping("signup")
+    @PostMapping("/signup")
     public String createNewUser(@Valid User user, BindingResult bindingResult, Model model, HttpServletRequest request)
             throws ServletException {
+        HttpSession session = request.getSession();
         Optional<User> userExist = userService.findUserByEmail(user.getEmail());
         if (userExist.isPresent()) {
             bindingResult
@@ -47,9 +52,10 @@ public class RegistrationController {
         }
 
         String preCryptPassword = user.getPassword();
-        userService.saveUser(user);
+        user = userService.saveUser(user);
         request.login(user.getEmail(), preCryptPassword);
         request.getSession().setAttribute("user", user);
+        orderService.saveGuestOrders(session, user);
         return "redirect:/catalog";
     }
 

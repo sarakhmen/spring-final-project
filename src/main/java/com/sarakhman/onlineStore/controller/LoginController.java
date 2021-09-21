@@ -1,6 +1,7 @@
 package com.sarakhman.onlineStore.controller;
 
 import com.sarakhman.onlineStore.model.User;
+import com.sarakhman.onlineStore.service.OrderService;
 import com.sarakhman.onlineStore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -22,6 +23,8 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/login")
     public String showLoginPage() {
@@ -43,9 +46,11 @@ public class LoginController {
             String currentUserEmail = authentication.getName();
             Optional<User> user = userService.findUserByEmail(currentUserEmail);
             if(session != null && user.isPresent()){
+                orderService.saveGuestOrders(session, user.get());
                 session.setAttribute("user", user.get());
             }
         }
+
         return "redirect:/catalog";
     }
 
