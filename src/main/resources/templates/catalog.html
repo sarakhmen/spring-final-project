@@ -75,8 +75,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <form th:action="@{/cart/add}" method="post">
-                                        <input type="hidden" name="productId" th:value="${product.id}"/>
+                                    <form th:action="@{/user/cart/add/{productId}(productId=${product.id})}" method="post">
                                         <button class="btn btn-outline-dark btn-sm">
                                             addToCart
                                         </button>
@@ -94,7 +93,7 @@
                                     <div th:if="${currentPage != 1}">
                                         <li>
                                             <a class="page-link"
-                                               th:href="@{/catalog(page=${currentPage - 1})}">previous</a>
+                                               th:href="@{/user/catalog(page=${currentPage - 1})}">previous</a>
                                         </li>
                                     </div>
 
@@ -108,7 +107,7 @@
                                         </div>
                                         <div th:unless="${pageNumber == currentPage}">
                                             <li>
-                                                <a th:href="@{/catalog(page=${pageNumber})}"
+                                                <a th:href="@{/user/catalog(page=${pageNumber})}"
                                                    th:text="${pageNumber}"
                                                    class="page-link"></a>
                                             </li>
@@ -118,7 +117,7 @@
                                     <div th:if="${currentPage < productPage.totalPages}">
                                         <li>
                                             <a class="page-link"
-                                               th:href="@{/catalog(page=${currentPage + 1})}">next</a>
+                                               th:href="@{/user/catalog(page=${currentPage + 1})}">next</a>
                                         </li>
                                     </div>
                                 </ul>
@@ -136,7 +135,7 @@
             </div>
             <div class="row pt-5">
                 <div class="col mt-3" style="height: 600px; overflow-y: scroll;">
-                    <form id="formProperties" th:action="@{/catalog}">
+                    <form id="formProperties" th:action="@{/user/catalog}">
                         <input type="hidden" name="action" value="selectByProperties">
                         <!--            <c:set var="j" value="${1}"/>-->
                         <!--            <c:forEach items="${sessionScope.productProperties}" var="property">-->

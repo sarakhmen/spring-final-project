@@ -9,11 +9,11 @@
 </head>
 <body>
 <div class="container">
-    <div th:insert="header"></div>
+    <div th:insert="adminHeader"></div>
 
     <div class="row mx-3 pt-4 gx-5">
         <div class="col fs-5">
-            yourOrders
+            User orders with id = [[${session.cartUserId}]]
         </div>
     </div>
     <div class="row mx-3 pt-4 gx-5">
@@ -27,10 +27,12 @@
                     <th scope="col">status</th>
                     <th></th>
                     <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                    <div th:each="order, iStat : ${orderPage}">
+                <div th:each="order, iStat : ${orderPage}">
                     <tr>
                         <th scope="row" th:text="${pageSize * (currentPage - 1) + iStat.index + 1}"></th>
                         <td th:text="${order.product.productName}">
@@ -40,22 +42,42 @@
                         <td th:text="${order.status.displayValue}">
                         </td>
                         <td>
-                            <form th:action="@{/user/cart/delete/{orderId}(orderId=${order.id})}" method="post">
+                            <form th:action="@{/admin/management/cart/delete/{orderId}(orderId=${order.id})}"
+                                  method="post">
                                 <button class="btn btn-outline-dark btn-sm">
                                     delete
                                 </button>
                             </form>
                         </td>
                         <td>
-                            <form th:action="@{/user/cart/order/{orderId}(orderId=${order.id})}" method="post">
+                            <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},
+                            status=${T(com.sarakhman.onlineStore.model.Status).REGISTERED})}" method="post">
                                 <button class="btn btn-outline-dark btn-sm"
-                                        th:disabled="${order.status.displayValue != 'Unregistered'}">
-                                order
+                                        th:disabled="${order.status.displayValue == 'Registered'}">
+                                    register
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},
+                            status=${T(com.sarakhman.onlineStore.model.Status).PAID})}" method="post">
+                                <button class="btn btn-outline-dark btn-sm"
+                                        th:disabled="${order.status.displayValue == 'Paid'}">
+                                    set as paid
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},
+                            status=${T(com.sarakhman.onlineStore.model.Status).CANCELED})}" method="post">
+                                <button class="btn btn-outline-dark btn-sm"
+                                        th:disabled="${order.status.displayValue == 'Canceled'}">
+                                    cancel
                                 </button>
                             </form>
                         </td>
                     </tr>
-                    </div>
+                </div>
                 </tbody>
             </table>
         </div>
@@ -67,7 +89,7 @@
                     <div th:if="${currentPage != 1}">
                         <li>
                             <a class="page-link"
-                               th:href="@{/user/cart/view(page=${currentPage - 1})}">previous</a>
+                               th:href="@{/admin/management/cart/view/{userId}(userId=${session.cartUserId}, page=${currentPage - 1})}">previous</a>
                         </li>
                     </div>
 
@@ -81,7 +103,7 @@
                         </div>
                         <div th:unless="${pageNumber == currentPage}">
                             <li>
-                                <a th:href="@{/user/cart/view(page=${pageNumber})}"
+                                <a th:href="@{/admin/management/cart/view/{userId}(userId=${session.cartUserId}, page=${pageNumber})}"
                                    th:text="${pageNumber}"
                                    class="page-link"></a>
                             </li>
@@ -91,7 +113,7 @@
                     <div th:if="${currentPage < orderPage.totalPages}">
                         <li>
                             <a class="page-link"
-                               th:href="@{/user/cart/view(page=${currentPage + 1})}">next</a>
+                               th:href="@{/admin/management/cart/view/{userId}(userId=${session.cartUserId}, page=${currentPage + 1})}">next</a>
                         </li>
                     </div>
                 </ul>

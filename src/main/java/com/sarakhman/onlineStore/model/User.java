@@ -1,9 +1,6 @@
 package com.sarakhman.onlineStore.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
@@ -53,6 +50,8 @@ public class User implements Serializable {
     private Set<Role> roles;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Order> orders;
 
 }

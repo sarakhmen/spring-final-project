@@ -5,6 +5,8 @@ import com.sarakhman.onlineStore.model.User;
 import com.sarakhman.onlineStore.repository.RoleRepository;
 import com.sarakhman.onlineStore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,10 @@ public class UserService {
         return userRepository.findUserById(id);
     }
 
+    public Page<User> findAllUsers(Pageable pageable){
+        return userRepository.findAll(pageable);
+    }
+
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(true);
@@ -54,7 +60,6 @@ public class UserService {
         User user = findUserById(id);
         if (user.getActive()) {
             user.setActive(false);
-
         } else {
             user.setActive(true);
         }

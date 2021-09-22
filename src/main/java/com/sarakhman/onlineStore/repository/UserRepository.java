@@ -1,6 +1,7 @@
 package com.sarakhman.onlineStore.repository;
 
 import com.sarakhman.onlineStore.model.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

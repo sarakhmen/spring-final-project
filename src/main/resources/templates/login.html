@@ -14,7 +14,7 @@
         Authorization
     </div>
     <div class="d-flex justify-content-center pt-3">
-        <form th:action="@{/login/process}" method="POST">
+        <form th:action="@{/login}" method="POST">
             <div class="mb-3">
 
                 <label for="inputEmail1" class="form-label">Email</label>
@@ -24,10 +24,11 @@
             <div class="mb-3">
                 <label for="inputPassword1" class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" id="inputPassword1" placeholder="Enter your password">
-            </div>
-            <span th:if="${param.error}" style="color: red">
-                User Name or Password invalid, please verify</p>
+                <span th:if="${param.error}" style="color: red; text-align:center">
+                <p>User Name or Password invalid <br>
+                    (or the user is blocked)</p>
             </span>
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

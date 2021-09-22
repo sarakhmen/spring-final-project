@@ -3,6 +3,7 @@ package com.sarakhman.onlineStore.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
@@ -25,7 +26,7 @@ public class Product implements Serializable {
     private String productName;
 
     @Column(name = "price")
-    @NotEmpty(message = "*Please provide a price")
+    @DecimalMin(value="0.0", message = "*Price can't be less than zero")
     private double price;
 
     @Temporal(TemporalType.DATE)

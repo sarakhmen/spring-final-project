@@ -20,24 +20,24 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Controller
-@RequestMapping("/cart")
+@RequestMapping("/user/cart")
 public class CartController {
 
     @Autowired
     OrderService orderService;
 
-    @PostMapping("/add")
-    public String addToCart(@RequestParam("productId") String productId ,HttpServletRequest request){
+    @PostMapping("/add/{productId}")
+    public String addToCart(@PathVariable("productId") Long productId ,HttpServletRequest request){
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         if(user == null){
-            orderService.saveOrderForGuest(session, Integer.parseInt(productId));
+            orderService.saveOrderForGuest(session, productId);
         }
         else{
-            orderService.saveOrder(user.getId(), Integer.parseInt(productId));
+            orderService.saveOrder(user.getId(), productId);
         }
 
-        return "redirect:/catalog";
+        return "redirect:/user/catalog";
     }
 
     @GetMapping("/view")
@@ -80,12 +80,12 @@ public class CartController {
         else{
             orderService.deleteOrder(orderId);
         }
-        return "redirect:/cart/view";
+        return "redirect:/user/cart/view";
     }
 
     @PostMapping("/order/{orderId}")
     public String registerOrder(@PathVariable("orderId") Long orderId){
         orderService.updateOrderStatus(orderId, Status.REGISTERED);
-        return "redirect:/cart/view";
+        return "redirect:/user/cart/view";
     }
 }

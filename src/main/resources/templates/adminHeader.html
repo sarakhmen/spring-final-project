@@ -20,19 +20,22 @@
     <div class="col">
         <ul class="nav fs-4">
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/user/catalog}">Home</a>
+                <a class="nav-link active" th:href="@{/admin/catalog}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
-                   th:href="@{/user/cart/view}">Cart</a>
+                   th:href="@{/admin/management/cart/view/{userId}(userId=${session.user.id})}">Cart</a>
             </li>
             <li class="nav-item">
-                <span th:if="${#authentication.name != 'anonymousUser'}">
-                    <a class="nav-link disabled">Welcome page</a>
-                </span>
-                <span th:unless="${#authentication.name != 'anonymousUser'}">
-                    <a class="nav-link" th:href="@{/index}">Welcome page</a>
-                </span>
+                <a class="nav-link"
+                   th:href="@{/admin/management}">Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   th:href="@{/admin/product/add}">New product</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled">Welcome page</a>
             </li>
         </ul>
     </div>
@@ -44,30 +47,16 @@
         <a class="nav-link" href="#">UKR</a>
     </div>
 
-    <div th:if="${#authentication.name != 'anonymousUser'}" class="col-md-auto p-1">
+    <div class="col-md-auto p-1">
         <form th:action="@{/logout}">
             <button type="submit" onclick="return confirmLogOut()" class="btn btn-outline-primary">Log out
             </button>
         </form>
     </div>
-    <div th:if="${#authentication.name != 'anonymousUser'}" class="col-md-auto fs-4 ms-4 p-1">
+    <div class="col-md-auto fs-4 ms-4 p-1">
         <p th:text="${session.user.userName}">
             Username
         </p>
-    </div>
-    <div th:unless="${#authentication.name != 'anonymousUser'}" class="col-md-auto p-1">
-        <form th:action="@{/login}">
-            <button type="submit" class="btn btn-outline-primary">Log in</button>
-        </form>
-    </div>
-    <div th:unless="${#authentication.name != 'anonymousUser'}" class="col-md-auto p-1">
-        <form th:action="@{/signup}">
-            <button type="submit" class="btn btn-outline-secondary">Sign up
-            </button>
-        </form>
-    </div>
-    <div th:unless="${#authentication.name != 'anonymousUser'}" class="col-md-auto fs-4 ms-4 p-1">
-        Guest
     </div>
 </div>
 
