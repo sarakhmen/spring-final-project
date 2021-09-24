@@ -4,6 +4,7 @@ import com.sarakhman.onlineStore.model.Order;
 import com.sarakhman.onlineStore.model.Status;
 import com.sarakhman.onlineStore.model.User;
 import com.sarakhman.onlineStore.service.OrderService;
+import com.sarakhman.onlineStore.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,13 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/user/cart")
@@ -55,17 +52,7 @@ public class CartController {
             orderPage = orderService.findAllOrdersByUserId(user.getId(), pageable);
         }
 
-        model.addAttribute("orderPage", orderPage);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pageSize", size);
-
-        int totalPages = orderPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+        PaginationUtil.setPaginationAttributes(model, orderPage, page, size);
 
         return "cart";
     }

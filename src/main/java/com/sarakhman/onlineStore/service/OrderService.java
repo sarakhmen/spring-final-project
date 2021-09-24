@@ -7,16 +7,15 @@ import com.sarakhman.onlineStore.model.User;
 import com.sarakhman.onlineStore.repository.OrderRepository;
 import com.sarakhman.onlineStore.repository.ProductRepository;
 import com.sarakhman.onlineStore.repository.UserRepository;
+import com.sarakhman.onlineStore.util.PaginationUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,6 +25,7 @@ public class OrderService {
     ProductRepository productRepository;
     UserRepository userRepository;
 
+    @Autowired
     public OrderService(OrderRepository orderRepository, ProductRepository productRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
@@ -42,22 +42,7 @@ public class OrderService {
 
     public Page<Order> findAllOrdersByUserIdForGuest(HttpSession session, Pageable pageable) {
         List<Order> orders = (List<Order>)session.getAttribute("guestOrders");
-
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        int ordersSize;
-
-        if (orders == null || orders.size() < startItem) {
-            ordersSize = 0;
-            orders = Collections.emptyList();
-        } else {
-            ordersSize = orders.size();
-            int toIndex = Math.min(startItem + pageSize, ordersSize);
-            orders = orders.subList(startItem, toIndex);
-        }
-
-        return new PageImpl<>(orders, PageRequest.of(currentPage, pageSize), ordersSize);
+        return PaginationUtil.getPageOf(pageable, orders);
     }
 
     @Transactional

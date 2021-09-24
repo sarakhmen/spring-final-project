@@ -32,7 +32,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <div th:each="order, iStat : ${orderPage}">
+                <div th:each="order, iStat : ${page}">
                     <tr>
                         <th scope="row" th:text="${pageSize * (currentPage - 1) + iStat.index + 1}"></th>
                         <td th:text="${order.product.productName}">
@@ -93,7 +93,7 @@
                         </li>
                     </div>
 
-                    <div th:if="${orderPage.totalPages > 0}"
+                    <div th:if="${page.totalPages > 0}"
                          th:each="pageNumber : ${pageNumbers}">
                         <div th:if="${pageNumber == currentPage}">
                             <li class="page-item active">
@@ -110,7 +110,7 @@
 
                         </div>
                     </div>
-                    <div th:if="${currentPage < orderPage.totalPages}">
+                    <div th:if="${currentPage < page.totalPages}">
                         <li>
                             <a class="page-link"
                                th:href="@{/admin/management/cart/view/{userId}(userId=${session.cartUserId}, page=${currentPage + 1})}">next</a>
@@ -120,7 +120,6 @@
             </nav>
         </div>
     </div>
-
 
 </div>
 </body>

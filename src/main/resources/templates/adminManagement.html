@@ -30,7 +30,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <div th:each="user : ${userPage}">
+                <div th:each="user : ${page}">
                     <tr>
                         <th scope="row" th:text="${user.id}"></th>
                         <td th:text="${user.userName}">
@@ -72,34 +72,6 @@
                                 </div>
                             </div>
                         </td>
-
-                        <!--            <td>-->
-                        <!--              <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},-->
-                        <!--                            status=${T(com.sarakhman.onlineStore.model.Status).REGISTERED})}" method="post">-->
-                        <!--                <button class="btn btn-outline-dark btn-sm"-->
-                        <!--                        th:disabled="${order.status.displayValue == 'Registered'}">-->
-                        <!--                  register-->
-                        <!--                </button>-->
-                        <!--              </form>-->
-                        <!--            </td>-->
-                        <!--            <td>-->
-                        <!--              <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},-->
-                        <!--                            status=${T(com.sarakhman.onlineStore.model.Status).PAID})}" method="post">-->
-                        <!--                <button class="btn btn-outline-dark btn-sm"-->
-                        <!--                        th:disabled="${order.status.displayValue == 'Paid'}">-->
-                        <!--                  set as paid-->
-                        <!--                </button>-->
-                        <!--              </form>-->
-                        <!--            </td>-->
-                        <!--            <td>-->
-                        <!--              <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},-->
-                        <!--                            status=${T(com.sarakhman.onlineStore.model.Status).CANCELED})}" method="post">-->
-                        <!--                <button class="btn btn-outline-dark btn-sm"-->
-                        <!--                        th:disabled="${order.status.displayValue == 'Canceled'}">-->
-                        <!--                  cancel-->
-                        <!--                </button>-->
-                        <!--              </form>-->
-                        <!--            </td>-->
                     </tr>
                 </div>
                 </tbody>
@@ -117,7 +89,7 @@
                         </li>
                     </div>
 
-                    <div th:if="${userPage.totalPages > 0}"
+                    <div th:if="${page.totalPages > 0}"
                          th:each="pageNumber : ${pageNumbers}">
                         <div th:if="${pageNumber == currentPage}">
                             <li class="page-item active">
@@ -134,7 +106,7 @@
 
                         </div>
                     </div>
-                    <div th:if="${currentPage < userPage.totalPages}">
+                    <div th:if="${currentPage < page.totalPages}">
                         <li>
                             <a class="page-link"
                                th:href="@{/admin/management(page=${currentPage + 1})}">next</a>

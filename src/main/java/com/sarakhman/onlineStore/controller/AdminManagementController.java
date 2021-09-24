@@ -1,8 +1,11 @@
 package com.sarakhman.onlineStore.controller;
 
-import com.sarakhman.onlineStore.model.*;
+import com.sarakhman.onlineStore.model.Order;
+import com.sarakhman.onlineStore.model.Status;
+import com.sarakhman.onlineStore.model.User;
 import com.sarakhman.onlineStore.service.OrderService;
 import com.sarakhman.onlineStore.service.UserService;
+import com.sarakhman.onlineStore.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,11 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/admin/management")
@@ -36,18 +34,8 @@ public class AdminManagementController {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Order> orderPage = orderService.findAllOrdersByUserId(userId, pageable);
 
-        model.addAttribute("orderPage", orderPage);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pageSize", size);
+        PaginationUtil.setPaginationAttributes(model, orderPage, page, size);
         session.setAttribute("cartUserId", userId);
-
-        int totalPages = orderPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
 
         return "adminCart";
     }
@@ -82,19 +70,7 @@ public class AdminManagementController {
                                  HttpServletRequest request){
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<User> userPage = userService.findAllUsers(pageable);
-
-        model.addAttribute("userPage", userPage);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pageSize", size);
-
-        int totalPages = userPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-
+        PaginationUtil.setPaginationAttributes(model, userPage, page, size);
         return "adminManagement";
     }
 

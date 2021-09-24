@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     Page<Order> findAllByUser(User user, Pageable pageable);
-//    @Query("SELECT o FROM Order o WHERE o.user.id = ?1")
     Page<Order> findAllByUserId(long id, Pageable pageable);
     void deleteById(long id);
     Order findById(long id);
