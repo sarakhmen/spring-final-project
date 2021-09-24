@@ -20,36 +20,36 @@
     <div class="col">
         <ul class="nav fs-4">
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/admin/catalog}">Home</a>
+                <a class="nav-link active" th:href="@{/admin/catalog}" th:text="#{navbar.home}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
-                   th:href="@{/admin/management/cart/view/{userId}(userId=${session.user.id})}">Cart</a>
+                   th:href="@{/admin/management/cart/view/{userId}(userId=${session.user.id})}" th:text="#{navbar.cart}">Cart</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
-                   th:href="@{/admin/management}">Management</a>
+                   th:href="@{/admin/management}" th:text="#{navbar.management}">Management</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
-                   th:href="@{/admin/product/add}">New product</a>
+                   th:href="@{/admin/product/add}" th:text="#{navbar.new.product}">New product</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled">Welcome page</a>
+                <a class="nav-link disabled" th:text="#{navbar.welcome}">Welcome page</a>
             </li>
         </ul>
     </div>
 
     <div class="col-md-auto pt-1 pe-0">
-        <a class="nav-link" href="#">ENG</a>
+        <a class="nav-link" th:href="@{${#httpServletRequest.requestURI}(lang='en')}" th:text="#{navbar.lang.en}">ENG</a>
     </div>
     <div class="col-md-auto pt-1 ps-0 pe-2">
-        <a class="nav-link" href="#">UKR</a>
+        <a class="nav-link" th:href="@{${#httpServletRequest.requestURI}(lang='uk')}" th:text="#{navbar.lang.uk}">UKR</a>
     </div>
 
     <div class="col-md-auto p-1">
         <form th:action="@{/logout}">
-            <button type="submit" onclick="return confirmLogOut()" class="btn btn-outline-primary">Log out
+            <button type="submit" onclick="return confirmLogOut()" th:text="#{navbar.logout}" class="btn btn-outline-primary">Log out
             </button>
         </form>
     </div>

@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Cart page</title>
+    <title th:text="#{title.cart}">Cart page</title>
 </head>
 <body>
 <div class="container">
     <div th:insert="adminHeader"></div>
 
     <div class="row mx-3 pt-4 gx-5">
-        <div class="col fs-5">
+        <div class="col fs-5" th:text="#{cart.admin.orders(${session.cartUserId})}">
             User orders with id = [[${session.cartUserId}]]
         </div>
     </div>
@@ -22,9 +22,9 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">productName</th>
-                    <th scope="col">price</th>
-                    <th scope="col">status</th>
+                    <th scope="col" th:text="#{cart.order.product.name}">productName</th>
+                    <th scope="col" th:text="#{cart.order.price}">price</th>
+                    <th scope="col" th:text="#{cart.order.status}">status</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -44,7 +44,7 @@
                         <td>
                             <form th:action="@{/admin/management/cart/delete/{orderId}(orderId=${order.id})}"
                                   method="post">
-                                <button class="btn btn-outline-dark btn-sm">
+                                <button class="btn btn-outline-dark btn-sm" th:text="#{cart.order.delete}">
                                     delete
                                 </button>
                             </form>
@@ -52,7 +52,7 @@
                         <td>
                             <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},
                             status=${T(com.sarakhman.onlineStore.model.Status).REGISTERED})}" method="post">
-                                <button class="btn btn-outline-dark btn-sm"
+                                <button class="btn btn-outline-dark btn-sm" th:text="#{cart.admin.register}"
                                         th:disabled="${order.status.displayValue == 'Registered'}">
                                     register
                                 </button>
@@ -61,7 +61,7 @@
                         <td>
                             <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},
                             status=${T(com.sarakhman.onlineStore.model.Status).PAID})}" method="post">
-                                <button class="btn btn-outline-dark btn-sm"
+                                <button class="btn btn-outline-dark btn-sm" th:text="#{cart.admin.set.as.paid}"
                                         th:disabled="${order.status.displayValue == 'Paid'}">
                                     set as paid
                                 </button>
@@ -70,7 +70,7 @@
                         <td>
                             <form th:action="@{/admin/management/cart/order/{orderId}/{status}(orderId=${order.id},
                             status=${T(com.sarakhman.onlineStore.model.Status).CANCELED})}" method="post">
-                                <button class="btn btn-outline-dark btn-sm"
+                                <button class="btn btn-outline-dark btn-sm" th:text="#{cart.admin.cancel}"
                                         th:disabled="${order.status.displayValue == 'Canceled'}">
                                     cancel
                                 </button>
@@ -88,7 +88,7 @@
                 <ul class="pagination">
                     <div th:if="${currentPage != 1}">
                         <li>
-                            <a class="page-link"
+                            <a class="page-link" th:text="#{pagination.prev}"
                                th:href="@{/admin/management/cart/view/{userId}(userId=${session.cartUserId}, page=${currentPage - 1})}">previous</a>
                         </li>
                     </div>
@@ -112,7 +112,7 @@
                     </div>
                     <div th:if="${currentPage < page.totalPages}">
                         <li>
-                            <a class="page-link"
+                            <a class="page-link" th:text="#{pagination.next}"
                                th:href="@{/admin/management/cart/view/{userId}(userId=${session.cartUserId}, page=${currentPage + 1})}">next</a>
                         </li>
                     </div>

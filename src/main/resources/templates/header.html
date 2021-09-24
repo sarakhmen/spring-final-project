@@ -20,33 +20,33 @@
     <div class="col">
         <ul class="nav fs-4">
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{/user/catalog}">Home</a>
+                <a class="nav-link active" th:href="@{/user/catalog}" th:text="#{navbar.home}"></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
-                   th:href="@{/user/cart/view}">Cart</a>
+                   th:href="@{/user/cart/view}" th:text="#{navbar.cart}">>Cart</a>
             </li>
             <li class="nav-item">
                 <span th:if="${#authentication.name != 'anonymousUser'}">
-                    <a class="nav-link disabled">Welcome page</a>
+                    <a class="nav-link disabled" th:text="#{navbar.welcome}">Welcome page</a>
                 </span>
                 <span th:unless="${#authentication.name != 'anonymousUser'}">
-                    <a class="nav-link" th:href="@{/index}">Welcome page</a>
+                    <a class="nav-link" th:href="@{/index}" th:text="#{navbar.home}">Welcome page</a>
                 </span>
             </li>
         </ul>
     </div>
 
     <div class="col-md-auto pt-1 pe-0">
-        <a class="nav-link" href="#">ENG</a>
+        <a class="nav-link" th:text="#{navbar.lang.en}" th:href="@{${#httpServletRequest.requestURI}(lang='en')}">ENG</a>
     </div>
     <div class="col-md-auto pt-1 ps-0 pe-2">
-        <a class="nav-link" href="#">UKR</a>
+        <a class="nav-link" th:text="#{navbar.lang.uk}" th:href="@{${#httpServletRequest.requestURI}(lang='uk')}">UKR</a>
     </div>
 
     <div th:if="${#authentication.name != 'anonymousUser'}" class="col-md-auto p-1">
         <form th:action="@{/logout}">
-            <button type="submit" onclick="return confirmLogOut()" class="btn btn-outline-primary">Log out
+            <button type="submit" onclick="return confirmLogOut()" class="btn btn-outline-primary" th:text="#{navbar.logout}">Log out
             </button>
         </form>
     </div>
@@ -57,16 +57,16 @@
     </div>
     <div th:unless="${#authentication.name != 'anonymousUser'}" class="col-md-auto p-1">
         <form th:action="@{/login}">
-            <button type="submit" class="btn btn-outline-primary">Log in</button>
+            <button type="submit" class="btn btn-outline-primary" th:text="#{navbar.login}">Log in</button>
         </form>
     </div>
     <div th:unless="${#authentication.name != 'anonymousUser'}" class="col-md-auto p-1">
         <form th:action="@{/signup}">
-            <button type="submit" class="btn btn-outline-secondary">Sign up
+            <button type="submit" class="btn btn-outline-secondary" th:text="#{navbar.signup}">Sign up
             </button>
         </form>
     </div>
-    <div th:unless="${#authentication.name != 'anonymousUser'}" class="col-md-auto fs-4 ms-4 p-1">
+    <div th:unless="${#authentication.name != 'anonymousUser'}" class="col-md-auto fs-4 ms-4 p-1" th:text="#{navbar.guest}">
         Guest
     </div>
 </div>
