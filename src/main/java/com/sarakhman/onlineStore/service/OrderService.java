@@ -21,9 +21,9 @@ import java.util.List;
 @Service
 public class OrderService {
 
-    OrderRepository orderRepository;
-    ProductRepository productRepository;
-    UserRepository userRepository;
+    private OrderRepository orderRepository;
+    private ProductRepository productRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public OrderService(OrderRepository orderRepository, ProductRepository productRepository, UserRepository userRepository) {
@@ -36,9 +36,6 @@ public class OrderService {
         return orderRepository.findAllByUserId(userId, page);
     }
 
-    public Page<Order> findAllOrdersByUser(User user, Pageable page){
-        return orderRepository.findAllByUser(user, page);
-    }
 
     public Page<Order> findAllOrdersByUserIdForGuest(HttpSession session, Pageable pageable) {
         List<Order> orders = (List<Order>)session.getAttribute("guestOrders");

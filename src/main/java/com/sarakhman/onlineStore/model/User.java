@@ -22,7 +22,7 @@ public class User implements Serializable {
     @Column(name = "user_id")
     private long id;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @Email(message = "*Please provide a valid Email")
     @NotEmpty(message = "*Please provide an email")
     private String email;

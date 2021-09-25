@@ -27,10 +27,6 @@ public class CatalogService {
         this.productRepository = productRepository;
     }
 
-    public Page<Product> findAllProducts(Pageable pageable){
-        return productRepository.findAll(pageable);
-    }
-
     @Transactional
     public void deleteProductById(Long id){
         productRepository.deleteById(id);
@@ -50,10 +46,11 @@ public class CatalogService {
         productRepository.save(product);
     }
 
+    @Transactional
     public Page<Product> findProductsSortedAndByPropertiesAndPrice(Map<String, Set<String>> properties,
                                                                    double start, double stop,
                                                                    Pageable pageable){
-        if(properties.isEmpty()){
+        if(properties == null || properties.isEmpty()){
             return productRepository.findByPriceBetween(start, stop, pageable);
         }
 
@@ -86,6 +83,9 @@ public class CatalogService {
 
         Sort sort = null;
         switch(sortParam){
+            case "byNameZA":
+                sort = Sort.by(Sort.Direction.DESC, "productName");
+                break;
             case "byPriceLH":
                 sort = Sort.by(Sort.Direction.ASC, "price");
                 break;
@@ -93,10 +93,10 @@ public class CatalogService {
                 sort = Sort.by(Sort.Direction.DESC, "price");
                 break;
             case "newest":
-                sort = Sort.by(Sort.Direction.ASC, "creationDate");
+                sort = Sort.by(Sort.Direction.DESC, "creationDate");
                 break;
             default:
-                sort = Sort.by(Sort.Direction.DESC, "productName");
+                sort = Sort.by(Sort.Direction.ASC, "productName");
                 break;
         }
         return sort;

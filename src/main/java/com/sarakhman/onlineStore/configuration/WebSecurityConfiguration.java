@@ -44,7 +44,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/index", "/").not().authenticated()
                     .antMatchers("/user/cart/order/**").authenticated()
                     .antMatchers("/user/**").not().hasAuthority("ADMIN")
-
 //                    .anyRequest().authenticated()
                 .and()
                 .formLogin()
