@@ -6,6 +6,7 @@ import com.sarakhman.onlineStore.service.PropertyService;
 import com.sarakhman.onlineStore.util.PaginationUtil;
 import com.sarakhman.onlineStore.util.ProductPropertyUtil;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 
+@Log4j2
 @Controller
 public class CatalogController {
 
@@ -30,18 +32,15 @@ public class CatalogController {
     CatalogService catalogService;
     @Autowired
     PropertyService propertyService;
-
-    static final Logger logger = LogManager.getLogger();
     @GetMapping("/user/catalog")
     public String catalogView(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page,
                               @RequestParam(name = "size", required = false, defaultValue = "10") int size,
                               @RequestParam(name = "priceFrom", required = false, defaultValue = "0") double priceFrom,
                               @RequestParam(name = "priceTo", required = false, defaultValue = "1.7976931348623157E308")
                                           double priceTo, HttpServletRequest request){
-        logger.debug("FIRST LOG");
-        logger.info("FIRST INFO LOG");
         double[] priceFromTo = ProductPropertyUtil.retrieveAndProcessPriceRange(priceFrom, priceTo, request);
         if(priceFromTo[0] > priceFromTo[1]){
+            log.error("priceFrom greater than priseTo");
             return "redirect:/user/catalog?priceError=true";
         }
 
@@ -56,7 +55,7 @@ public class CatalogController {
                 .findProductsSortedAndByPropertiesAndPrice(selectedProperties, priceFromTo[0], priceFromTo[1], pageable);
 
         PaginationUtil.setPaginationAttributes(model, productPage, page, size);
-
+        log.info("catalog page successfully set up");
         return "catalog";
     }
 
@@ -64,6 +63,7 @@ public class CatalogController {
     public String changeSortOrder(@RequestParam(name = "sort", required = false, defaultValue = "byNameAZ") String sort,
                                   HttpServletRequest request){
         request.getSession().setAttribute("sort", sort);
+        log.info("Sort method successfully changed");
         return "redirect:/user/catalog";
     }
 }
