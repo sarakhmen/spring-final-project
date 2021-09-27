@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+
+/**
+ * Processes cart requests for users and guests
+ */
 @Log4j2
 @Controller
 @RequestMapping("/user/cart")

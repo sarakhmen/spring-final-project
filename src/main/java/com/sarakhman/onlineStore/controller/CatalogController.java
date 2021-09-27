@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 
+/**
+ * Processes catalog requests for users and guests
+ */
 @Log4j2
 @Controller
 public class CatalogController {

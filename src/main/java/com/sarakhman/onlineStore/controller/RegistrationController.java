@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Optional;
 
+
+/**
+ * Processes registration requests
+ */
 @Log4j2
 @Controller
 public class RegistrationController {
