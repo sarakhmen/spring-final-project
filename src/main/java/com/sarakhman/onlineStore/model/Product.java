@@ -1,12 +1,9 @@
 package com.sarakhman.onlineStore.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
@@ -29,16 +26,20 @@ public class Product implements Serializable {
     private String productName;
 
     @Column(name = "price")
-    @NotEmpty(message = "*Please provide a price")
+    @DecimalMin(value="0.0", message = "*Price can't be less than zero")
     private double price;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "creation_date")
-    private Date creationDate;
+    private Date creationDate = new Date();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Property> properties;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Order> orders;
 }

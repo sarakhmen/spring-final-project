@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script>
+        function sendForm(formId) {
+            document.getElementById(formId).submit();
+        }
+    </script>
+
+    <title th:text="#{title.catalog}">Catalog page</title>
+</head>
+<body>
+<div class="container">
+    <div th:insert="header"></div>
+    <div class="row mx-3 pt-4 gx-5">
+        <div class="col-9">
+            <div class="row">
+                <div class="col fs-5" th:text="#{catalog.products.all}">
+                    allProducts
+                </div>
+                <div class="col-md-auto">
+                    <form id="sortForm" th:action="@{/user/catalog/sort}">
+                        <label for="sortSelect" class="fs-5" th:text="#{catalog.sort.by}">sortBy</label>
+                        <select name="sort" id="sortSelect" onchange="sendForm('sortForm')">
+                            <option id="option1" th:text="#{catalog.sort.name.az}" th:selected="${session.sort == 'byNameAZ'}"
+                                    value="byNameAZ"></option>
+                            <option id="option2" th:text="#{catalog.sort.name.za}" th:selected="${session.sort == 'byNameZA'}"
+                                    value="byNameZA"></option>
+                            <option id="option3" th:text="#{catalog.sort.price.hl}" th:selected="${session.sort == 'byPriceHL'}"
+                                    value="byPriceHL"></option>
+                            <option id="option4" th:text="#{catalog.sort.price.lh}" th:selected="${session.sort == 'byPriceLH'}"
+                                    value="byPriceLH"></option>
+                            <option id="option5" th:text="#{catalog.sort.newest}" th:selected="${session.sort == 'newest'}"
+                                    value="newest"></option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" th:text="#{catalog.product.name}">productName</th>
+                            <th scope="col" th:text="#{catalog.product.price}">price</th>
+                            <th scope="col" th:text="#{catalog.product.date}">creationDate</th>
+                            <th scope="col" th:text="#{catalog.product.properties}">properties</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <div th:each="product, iStat : ${page}">
+                            <tr>
+                                <th scope="row" th:text="${pageSize * (currentPage - 1) + iStat.index + 1}"></th>
+                                <!--                <c:set var="i" value="${i+1}"/>-->
+                                <td th:text="${product.productName}"/>
+                                <td th:text="${product.price}"/>
+                                <td th:text="${product.creationDate}"/>
+                                <td>
+                                    <div th:each="property : ${product.properties}">
+                                        <p th:text="${property.propertyName + ':' + property.propertyValue}"></p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form th:action="@{/user/cart/add/{productId}(productId=${product.id})}"
+                                          method="post">
+                                        <button class="btn btn-outline-dark btn-sm" th:text="#{catalog.product.cart.add}">
+                                            addToCart
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </div>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <div th:if="${currentPage != 1}">
+                                        <li>
+                                            <a class="page-link"
+                                               th:href="@{/user/catalog(page=${currentPage - 1})}" th:text="#{pagination.prev}">previous</a>
+                                        </li>
+                                    </div>
+
+                                    <div th:if="${page.totalPages > 0}"
+                                         th:each="pageNumber : ${pageNumbers}">
+                                        <div th:if="${pageNumber == currentPage}">
+                                            <li class="page-item active">
+                                                <a th:text="${pageNumber}"
+                                                   class="page-link" aria-disabled="true"></a>
+                                            </li>
+                                        </div>
+                                        <div th:unless="${pageNumber == currentPage}">
+                                            <li>
+                                                <a th:href="@{/user/catalog(page=${pageNumber})}"
+                                                   th:text="${pageNumber}"
+                                                   class="page-link"></a>
+                                            </li>
+
+                                        </div>
+                                    </div>
+                                    <div th:if="${currentPage < page.totalPages}">
+                                        <li>
+                                            <a class="page-link"
+                                               th:href="@{/user/catalog(page=${currentPage + 1})}" th:text="#{pagination.next}">next</a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <div class="col fs-5" th:text="#{catalog.product.properties}">
+                    Properties:
+                </div>
+            </div>
+            <div class="row pt-5">
+                <div class="col mt-3" style="height: 600px; overflow-y: scroll;">
+                    <form id="formProperties" th:action="@{/user/catalog}">
+                        <input type="hidden" name="action" value="selectByProperties">
+                        <div th:each="property, iStat : ${properties}">
+                            <fieldset>
+                                <legend class="fs-5" th:text="${property.key}"></legend>
+                                <div th:each="value : ${property.value}">
+                                    <input class="form-check-input" type="checkbox" th:id="${iStat.index}"
+                                           th:name="${property.key}"
+                                           th:value="${value}"/>
+                                    <label th:for="${iStat.index}" th:text="${value}"></label>
+                                </div>
+                            </fieldset>
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col gx-1">
+                                <label for="priceFrom" class="form-label" th:text="#{catalog.price.from}">localPriceFrom</label>
+                                <input type="number" step="any" name="priceFrom" class="form-control" id="priceFrom"
+                                       min="0"
+                                       th:placeholder="#{catalog.price.from}">
+                            </div>
+                            <div class="col">
+                                <label for="priceTo" class="form-label" th:text="#{catalog.price.to}">localPriceTo</label>
+                                <input type="number" step="any" name="priceTo" class="form-control" id="priceTo" min="0"
+                                       th:placeholder="#{catalog.price.to}">
+                            </div>
+                        </div>
+                        <div th:if="${param.priceError}" style="color: red; text-align:center" th:text="#{error.price}">
+                           *Price range is incorrect
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-auto fs-6 pt-5">
+                    <button form="formProperties" class="btn btn-outline-dark" th:text="#{catalog.select}">
+                        submitSelect
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

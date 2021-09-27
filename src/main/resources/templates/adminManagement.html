@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title th="#{title.management">Management page</title>
+</head>
+<body>
+<div class="container">
+    <div th:insert="adminHeader"></div>
+
+    <div class="row mx-3 pt-4 gx-5">
+        <div class="col fs-5" th:text="#{management.users}">
+            all Users
+        </div>
+    </div>
+    <div class="row mx-3 pt-4 gx-5">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" th:text="#{management.id}">id</th>
+                    <th scope="col"th:text="#{management.name}">userName</th>
+                    <th scope="col" th:text="#{management.email}">email</th>
+                    <th scope="col" th:text="#{management.role}">role</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="user : ${page}">
+                    <tr>
+                        <th scope="row" th:text="${user.id}"></th>
+                        <td th:text="${user.userName}">
+                        </td>
+                        <td th:text="${user.email}">
+                        </td>
+                        <td th:text="${user.roles[0].role}">
+                        </td>
+                        <td>
+                            <form th:action="@{/admin/management/cart/view/{userId}(userId=${user.id})}"
+                                  method="get">
+                                <button class="btn btn-outline-dark btn-sm" th:text="#{management.cart}">
+                                    cart
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <div th:if="${user.roles[0].role == 'ADMIN'}">
+                                <button disabled class="btn btn-outline-dark btn-sm" th:text="#{management.block}">
+                                    block
+                                </button>
+                            </div>
+                            <div th:unless="${user.roles[0].role == 'ADMIN'}">
+                                <div th:if="${user.active == false}">
+                                    <form th:action="@{/admin/management/block}" method="post">
+                                        <input type="hidden" name="userId" th:value="${user.id}"/>
+                                        <button class="btn btn-outline-dark btn-sm" th:text="#{management.unblock}">
+                                            unblock
+                                        </button>
+                                    </form>
+                                </div>
+                                <div th:unless="${user.active == false}">
+                                    <form th:action="@{/admin/management/block}" method="post">
+                                        <input type="hidden" name="userId" th:value="${user.id}"/>
+                                        <button class="btn btn-outline-dark btn-sm" th:text="#{management.block}">
+                                            block
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mx-3 pt-4 gx-5">
+        <div class="col-md-auto">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <div th:if="${currentPage != 1}">
+                        <li>
+                            <a class="page-link"
+                               th:href="@{/admin/management(page=${currentPage - 1})}" th:text="#{pagination.prev}">previous</a>
+                        </li>
+                    </div>
+
+                    <div th:if="${page.totalPages > 0}"
+                         th:each="pageNumber : ${pageNumbers}">
+                        <div th:if="${pageNumber == currentPage}">
+                            <li class="page-item active">
+                                <a th:text="${pageNumber}"
+                                   class="page-link" aria-disabled="true"></a>
+                            </li>
+                        </div>
+                        <div th:unless="${pageNumber == currentPage}">
+                            <li>
+                                <a th:href="@{/admin/management(page=${pageNumber})}"
+                                   th:text="${pageNumber}"
+                                   class="page-link"></a>
+                            </li>
+
+                        </div>
+                    </div>
+                    <div th:if="${currentPage < page.totalPages}">
+                        <li>
+                            <a class="page-link"
+                               th:href="@{/admin/management(page=${currentPage + 1})}" th:text="#{pagination.next}">next</a>
+                        </li>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>
